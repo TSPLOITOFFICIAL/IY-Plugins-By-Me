@@ -1,0 +1,117 @@
+local Plugin = {
+	["PluginName"] = "CharacterChar",
+	["PluginDescription"] = "Become Another Persons Avatar!",
+	["Commands"] = {
+		["char"] = {
+			["ListName"] = "char [user]",
+			["Description"] = "Changes Ur Character",
+			["Aliases"] = {character, "" },
+			["Function"] = function(args, speaker)
+			     -- Local Script in StarterPlayerScripts
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+local player = game.Players.LocalPlayer
+
+-- Create RemoteEvent for changing character appearance
+local changeCharacterEvent = Instance.new("RemoteEvent")
+changeCharacterEvent.Name = "ChangeCharacterEvent"
+changeCharacterEvent.Parent = ReplicatedStorage
+
+-- Create Server Script to handle the character change
+local serverScript = Instance.new("Script")
+serverScript.Name = "ChangeCharacterHandler"
+serverScript.Parent = ServerScriptService
+
+serverScript.Source = [[
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local changeCharacterEvent = ReplicatedStorage:WaitForChild("ChangeCharacterEvent")
+
+local function onRequestChangeCharacter(player, targetPlayerName)
+    local targetPlayer = Players:FindFirstChild(targetPlayerName)
+    
+    if targetPlayer and targetPlayer.Character and player.Character then
+        local targetCharacter = targetPlayer.Character
+        local character = player.Character
+
+        -- Clear existing accessories and clothing
+        for _, item in pairs(character:GetChildren()) do
+            if item:IsA("Accessory") or item:IsA("Shirt") or item:IsA("Pants") then
+                item:Destroy()
+            end
+        end
+
+        -- Clone target character's accessories
+        for _, accessory in pairs(targetCharacter:GetChildren()) do
+            if accessory:IsA("Accessory") then
+                accessory:Clone().Parent = character
+            end
+        end
+
+        -- Change clothing
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local targetHumanoid = targetCharacter:FindFirstChildOfClass("Humanoid")
+        
+        if humanoid and targetHumanoid then
+            humanoid:ApplyDescription(targetHumanoid:GetAppliedDescription())
+        end
+    end
+end
+
+changeCharacterEvent.OnServerEvent:Connect(onRequestChangeCharacter)
+]]
+
+-- Fire RemoteEvent to test
+local targetPlayerName = "TargetPlayer" -- Replace with the target player's name
+changeCharacterEvent:FireServer(targetPlayerName)
+                         end,
+      ["namechar"] = {
+        ["ListName"] = "namechar [user]",
+        ["Description"] = "Changes Ur Name",
+        ["Aliases"] = {changename, "" },
+        ["Function"] = function(args, speaker)
+            -- Local Script in StarterPlayerScripts
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+local player = game.Players.LocalPlayer
+
+-- Create RemoteEvent for changing display name
+local changeNameEvent = Instance.new("RemoteEvent")
+changeNameEvent.Name = "ChangeNameEvent"
+changeNameEvent.Parent = ReplicatedStorage
+
+-- Create Server Script to handle the name change
+local serverScript = Instance.new("Script")
+serverScript.Name = "ChangeNameHandler"
+serverScript.Parent = ServerScriptService
+
+serverScript.Source = [[
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local changeNameEvent = ReplicatedStorage:WaitForChild("ChangeNameEvent")
+
+local function onRequestChangeName(player, targetPlayerName)
+    local targetPlayer = Players:FindFirstChild(targetPlayerName)
+    
+    if targetPlayer then
+        player.DisplayName = targetPlayer.DisplayName
+    end
+end
+
+changeNameEvent.OnServerEvent:Connect(onRequestChangeName)
+]]
+
+-- Fire RemoteEvent to test
+local targetPlayerName = "TargetPlayer" -- Replace with the target player's name
+changeNameEvent:FireServer(targetPlayerName)
+          end,
+      },
+		},
+	},
+}
+
+return Plugin
