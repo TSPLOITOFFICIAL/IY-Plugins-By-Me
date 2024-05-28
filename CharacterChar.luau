@@ -3,16 +3,16 @@ local Plugin = {
 	["PluginDescription"] = "Become Another Persons Avatar!",
 	["Commands"] = {
 		["char"] = {
-			["ListName"] = "char",
+			["ListName"] = "char [user]",
 			["Description"] = "Changes Ur Character",
-			["Aliases"] = {character},
+			["Aliases"] = {character, "" },
 			["Function"] = function(args, speaker)
 				loadstring(game:HttpGetAsync("https://pastebin.com/raw/fPP8bZ8Z"))()
 			end,
       ["namechar"] = {
-        ["ListName"] = "namechar",
+        ["ListName"] = "namechar [user]",
         ["Description"] = "Changes Ur Name",
-        ["Aliases"] = {changename},
+        ["Aliases"] = {changename, "" },
         ["Function"] = function(args, speaker)
             
           end,
