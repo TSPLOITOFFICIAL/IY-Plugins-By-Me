@@ -27,7 +27,9 @@ serverScript.Source = [[
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local changeCharacterEvent = ReplicatedStorage:WaitForChild("ChangeCharacterEvent")
+local changeCharacterEvent = Instance.new("RemoteEvent")
+
+changeCharacterEvent.Parent = ReplicatedStorage
 
 local function onRequestChangeCharacter(player, targetPlayerName)
     local targetPlayer = Players:FindFirstChild(targetPlayerName)
@@ -76,7 +78,7 @@ changeCharacterEvent:FireServer(targetPlayerName)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
-local player = game.Players.LocalPlayer
+local player = speaker
 
 -- Create RemoteEvent for changing display name
 local changeNameEvent = Instance.new("RemoteEvent")
@@ -106,7 +108,7 @@ changeNameEvent.OnServerEvent:Connect(onRequestChangeName)
 ]]
 
 -- Fire RemoteEvent to test
-local targetPlayerName = "TargetPlayer" -- Replace with the target player's name
+local targetPlayerName = args  
 changeNameEvent:FireServer(targetPlayerName)
           end,
       },
