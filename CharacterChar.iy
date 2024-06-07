@@ -11,7 +11,7 @@ local Plugin = {
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
-local player = game.Players.LocalPlayer
+local player = speaker
 
 -- Create RemoteEvent for changing character appearance
 local changeCharacterEvent = Instance.new("RemoteEvent")
@@ -66,7 +66,7 @@ changeCharacterEvent.OnServerEvent:Connect(onRequestChangeCharacter)
 ]]
 
 -- Fire RemoteEvent to test
-local targetPlayerName = "TargetPlayer" -- Replace with the target player's name
+local targetPlayerName = args -- Replace with the target player's name
 changeCharacterEvent:FireServer(targetPlayerName)
                          end,
       ["namechar"] = {
